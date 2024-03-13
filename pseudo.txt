@@ -1,0 +1,7 @@
+-> Vi vil gerne have at når start bliver kaldt
+
+
+//Implement timer so that every 20 seconds a random ship comes in
+//Implement a random height that it starts from
+//Implement a random number that indicates if it comes from left or right
+//
