@@ -1,4 +1,4 @@
 D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\module-info.java
-D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\dk\sdu\mmmi\cbse\Enemy.java
-D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\dk\sdu\mmmi\cbse\EnemyControlSystem.java
-D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\dk\sdu\mmmi\cbse\EnemyPlugin.java
+D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\dk\sdu\mmmi\enemysystem\Enemy.java
+D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\dk\sdu\mmmi\enemysystem\EnemyPlugin.java
+D:\GitHub\AngularPortfolioWebsite\AsteroidsFX\Enemy\src\main\java\dk\sdu\mmmi\enemysystem\EnemyControlSystem.java
