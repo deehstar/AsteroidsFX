@@ -8,22 +8,25 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
+import java.io.IOException;
 import java.lang.module.Configuration;
 import java.lang.module.ModuleDescriptor;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -38,6 +41,8 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Pane gameWindow = new Pane();
     private static ModuleLayer layer;
+    private final Text text = new Text(10, 20, "Score: 0");
+    private Timer timer = new Timer();
 
     public static void main(String[] args) {
       Path pluginsDir = Paths.get("plugins"); // Directory with plugins JARs
@@ -71,7 +76,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+      Platform.setImplicitExit(true);
+        timer.scheduleAtFixedRate(task, 0, 500);
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(text);
 
@@ -149,7 +155,14 @@ public class Main extends Application {
         }
     }
 
+
     private void draw() {
+      for (Entity entity : polygons.keySet()) {
+        if (!world.getEntities().contains(entity)) {
+          gameWindow.getChildren().remove(polygons.get(entity));
+          polygons.remove(entity);
+        }
+      }
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
             if (polygon == null) {
@@ -160,9 +173,32 @@ public class Main extends Application {
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
+
         }
 
     }
+
+  TimerTask task = new TimerTask() {
+    @Override
+    public void run() {
+      updateScore();
+    }
+  };
+    private void updateScore() {
+      HttpClient httpClient = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("http://localhost:8080/scoringsystem/score"))
+        .GET().build();
+
+      try {
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        text.setText("Score: " + response.body());
+      } catch (IOException | InterruptedException e) {
+
+      }
+    }
+
+
 
     private Collection<? extends IGamePluginService> getPluginServices() {
         return ServiceLoader.load(layer, IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
