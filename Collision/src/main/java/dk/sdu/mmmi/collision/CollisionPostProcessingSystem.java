@@ -65,7 +65,7 @@ public class CollisionPostProcessingSystem implements IPostEntityProcessingServi
     try {
       HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(url))
-        .PUT(HttpRequest.BodyPublishers.ofString(""))
+        .PUT(HttpRequest.BodyPublishers.noBody())
         .build();
 
       httpClient.send(request, HttpResponse.BodyHandlers.ofString());
