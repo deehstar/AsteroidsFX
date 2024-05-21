@@ -3,14 +3,21 @@ import dk.sdu.mmmi.playersystem.PlayerControlSystem;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class PlayerControlSystemTest {
+  private PlayerControlSystem playerControlSystem;
+  @Before
+  public void setUp() {
+    playerControlSystem = new PlayerControlSystem();
+  }
+
   @Test
-  void testMove() {
-    PlayerControlSystem playerControlSystem = new PlayerControlSystem();
+  public void testMove() {
+
     Player player = new Player("Player");
     GameData gameData = new GameData();
     World world = new World();
@@ -29,4 +36,5 @@ public class PlayerControlSystemTest {
     assertNotEquals(initialX, player.getX());
 
   }
+
 }
